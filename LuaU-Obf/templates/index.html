@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lua Obfuscator</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 50%; margin: 0 auto; text-align: center; }
+        textarea { width: 100%; height: 200px; margin: 20px 0; }
+        button { padding: 10px 20px; }
+        .results { margin-top: 20px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Safelock Obfuscator</h1>
+        <textarea id="luaInput" placeholder="Enter code"></textarea>
+        <button onclick="obfuscateCode()">Obfuscate</button>
+        <div class="results">
+            <h2>Output</h2>
+            <textarea id="obfuscatedCode" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        function obfuscateCode() {
+            const luaCode = document.getElementById('luaInput').value;
+
+            fetch('/obfuscate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: luaCode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.obfuscatedCode) {
+                    document.getElementById('obfuscatedCode').value = data.obfuscatedCode;
+                } else {
+                    alert('Error obfuscating code');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
